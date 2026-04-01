@@ -2,65 +2,65 @@ clc
 clear all
 close all
 
-disp('- KONVOLUSYON HESABI -');
-disp('(!) Baslangic noktalarini tam sayi olarak giriniz.');
-disp('(!) Sinyalleri [. . .] seklinde giriniz.');
-x_str = input('x[t] için t baslangic noktasi: ');
+disp('- CONVOLUTION CALCULATION -');
+disp('(!) Enter the starting points as integers.');
+disp('(!) Enter the signals in the form [. . .].');
+x_str = input('Starting point of t for x[t]: ');
 x = input('x[t] = '); % x[t]
-h_str = input('h[t] için t baslangic noktasi: ');
+h_str = input('Starting point of t for h[t]: ');
 h = input('h[t] = '); % h[t]
 
-m = length(x); % x[t] değer sayısı
-n = length(h); % h[t] değer sayısı
-l = m+n-1; % y[t] değer sayısı
-y_str = x_str + h_str; % y[t] başlangıç
+m = length(x); % number of values in x[t]
+n = length(h); % number of values in h[t]
+l = m+n-1; % number of values in y[t]
+y_str = x_str + h_str; % starting point of y[t]
 
-% benim konvolüsyon kodum
-y1 = zeros(1,l); % benim y[t] sinyalim
-for i = 1:m % x[t]'nin değeri
-    for j = 1:n % h[t]'nin iterasyonu
+% my convolution code
+y1 = zeros(1,l); % my y[t] signal
+for i = 1:m % value of x[t]
+    for j = 1:n % iteration of h[t]
         %{
-        her iterasyonda bir y[t] değerinin bir kısmı
-        örneğin y[1]:
-        x[2] h[1] iken y[1]'in bir kısmı ...
-        x[1] h[2] iken y[1]'in diğer bir kısmı ...
-        ve hepsinin üst üste eklenmesi.
+        In each iteration, part of a y[t] value is calculated.
+        For example, for y[1]:
+        when x[2] and h[1], one part of y[1] ...
+        when x[1] and h[2], another part of y[1] ...
+        and the sum of all of them together.
         %}
         y1(i+j-1) = y1(i+j-1) + h(j)*x(i);
     end
 end
 
-% hazır konvolüsyon fonksiyonu
-y2 = conv(x,h); % fonksiyonun y[t] sinyali
+% built-in convolution function
+y2 = conv(x,h); % function's y[t] signal
 
-% sonuçları yazdırma
+% print the results
 arr_all = [x h y1 y2];
-max = max(abs(arr_all)); % grafik y değeri için maximum
+max = max(abs(arr_all)); % maximum for graph y values
 
-subplot(221) % x[t] sinyali
+subplot(221) % x[t] signal
 stem(x_str:x_str+m-1, x, 'filled'),
-set(gca,'xlim',[x_str x_str+l-1]), % x düzlemi aralığı
-set(gca,'ylim',[-max max]), % y düzlemi aralığı
+set(gca,'xlim',[x_str x_str+l-1]), % x-axis range
+set(gca,'ylim',[-max max]), % y-axis range
 ylabel('x[t]'), xlabel('t'), grid on,
-title('1. Sinyal');
+title('1st Signal');
 
-subplot(222) % h[t] sinyali
+subplot(222) % h[t] signal
 stem(h_str:h_str+n-1, h, 'filled'),
 set(gca,'xlim',[h_str h_str+l-1]),
 set(gca,'ylim',[-max max]),
 ylabel('h[t]'), xlabel('t'), grid on,
-title('2. Sinyal');
+title('2nd Signal');
 
-subplot(223) % benim hesapladığım y[t] sinyali
+subplot(223) % my calculated y[t] signal
 stem(y_str:y_str+l-1, y1, 'filled'),
 set(gca,'xlim',[y_str y_str+l-1]),
 set(gca,'ylim',[-max max]),
 ylabel('y[t]'), xlabel('t'), grid on,
-title('Benim Konvolusyonum');
+title('My Convolution');
 
-subplot(224) % fonksiyonun y[t] sinyali
+subplot(224) % function's y[t] signal
 stem(y_str:y_str+l-1, y2, 'filled'),
 set(gca,'xlim',[y_str y_str+l-1]),
 set(gca,'ylim',[-max max]),
 ylabel('y[t]'), xlabel('t'), grid on,
-title('Fonksiyonun Konvolusyonu');
+title('Function Convolution');
